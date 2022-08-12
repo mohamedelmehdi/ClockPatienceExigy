@@ -55,10 +55,12 @@ namespace ClockPatienceExigy.Services
 
                 else
                 {
-                    List<string> rowcards = rowInput.Split(' ')?.ToList();
                     try
                     {
-                        //validation for number of cards by row
+                        //validate and prepare input row items
+                        List<Card> rowcards = rowInput.Split(' ')?.Select(c => new Card(c[0], c[1]))?.ToList();
+
+                        //validation of number of cards by row
                         if (rowcards.Count() != column) throw new Exception($"Not valid number of cards by row , should be => {column}"); 
 
                         DistributedInputRow(rowcards, ref cardArray);
@@ -74,13 +76,13 @@ namespace ClockPatienceExigy.Services
             }
         }
 
-        public void DistributedInputRow(List<string> rowcards, ref LinkedList<Card>[] cards)
+        public void DistributedInputRow(List<Card> rowcards, ref LinkedList<Card>[] cards)
         {
             int index = 0;
             //reverse one input row cards processing
             for (int x = rowcards.Count() - 1; x >= 0; x--)
             {
-                var currentCard = new Card(rowcards[x][0], rowcards[x][1]);
+                var currentCard = rowcards[x];
 
                 //Initializing linkedList 
                 if (cards[index] == null) cards[index] = new LinkedList<Card>();
